@@ -1,0 +1,26 @@
+Notes.txt on SDL2 Tutorial
+==========================
+
+20151013
+========
+Aufsetzen der Entwicklungsumgebung nach Tutorial 01
+Einrichten der Suchpfade und Compiler / Linkereinstellung
+
+1. Compilieren mit Fehlern
+    C:\SDL2-2.0.3\i686-w64-mingw32\include\SDL2\SDL_platform.h|121|fatal error: winapifamily.h: No such file or directory|
+    -> Google Suche
+    -> Lösung: http://stackoverflow.com/questions/22446008/winapifamily-h-no-such-file-or-directory-when-compiling-sdl-in-codeblocks#answer-22600114
+        This is a bug in SDL 2.0.3. A fix has been committed for SDL's next release. In the meantime, here's a link to the fixed copy of SDL_platform.h:
+        https://hg.libsdl.org/SDL/raw-file/e217ed463f25/include/SDL_platform.h
+        If you drop the file into SDL 2.0.3's include\SDL2\ directory, overwriting the original, your app(s) should compile ok.
+
+    C:\SDL2-2.0.3\i686-w64-mingw32\lib\libSDL2main.a(SDL_windows_main.o):SDL_windows_main.c|| undefined reference to `SDL_main'|
+     -> Lösung:
+        https://wiki.libsdl.org/FAQWindows#I_get_.22Undefined_reference_to_.27SDL_main.27.22_...
+        Make sure that you are declaring main() as:
+        #include "SDL.h"
+        int main(int argc, char *argv[])
+        You should be using main() instead of WinMain() even though you are creating a Windows application
+        , because SDL provides a version of WinMain() which performs some SDL initialization before calling your main code.
+        If for some reason you need to use WinMain(), take a look at the SDL source code in src/main/win32/SDL_main.c to see what
+        kind of initialization you need to do in your WinMain() function so that SDL works properly.
